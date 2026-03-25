@@ -1,0 +1,5 @@
+{
+  "name": "VetERP - Sistema Veterinário",
+  "description": "Um sistema ERP gratuito para clínicas veterinárias que funciona diretamente no navegador (sem custos de servidor).",
+  "requestFramePermissions": []
+}

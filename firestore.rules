@@ -1,0 +1,85 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+         request.auth.token.email == "matheusebert81@gmail.com");
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Validate required fields
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    // Validate string length
+    function validStringLength(field, minLen, maxLen) {
+      return request.resource.data[field] is string &&
+        request.resource.data[field].size() >= minLen &&
+        request.resource.data[field].size() <= maxLen;
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidAgendamento(data) {
+      return data.animal_id is string &&
+             data.cliente_id is string &&
+             data.data is string;
+    }
+
+    function isValidAnimal(data) {
+      return data.nome is string && data.nome.size() > 0 &&
+             data.especie is string;
+    }
+
+    function isValidCliente(data) {
+      return data.nome is string && data.nome.size() > 0;
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    // Default: Authenticated users can read/write, but we should refine
+    match /{collection}/{document} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) || isAdmin();
+    }
+
+    match /agendamentos/{id} {
+      allow create: if isAuthenticated() && isValidAgendamento(request.resource.data);
+      allow update: if isAuthenticated() && isValidAgendamento(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /animais/{id} {
+      allow create: if isAuthenticated() && isValidAnimal(request.resource.data);
+      allow update: if isAuthenticated() && isValidAnimal(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /clientes/{id} {
+      allow create: if isAuthenticated() && isValidCliente(request.resource.data);
+      allow update: if isAuthenticated() && isValidCliente(request.resource.data);
+      allow delete: if isAdmin();
+    }
+  }
+}

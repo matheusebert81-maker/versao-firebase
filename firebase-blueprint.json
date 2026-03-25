@@ -1,0 +1,333 @@
+{
+  "entities": {
+    "Agendamento": {
+      "title": "Agendamento",
+      "description": "Consultas e procedimentos agendados",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "animal_id": { "type": "string" },
+        "cliente_id": { "type": "string" },
+        "data": { "type": "string", "format": "date-time" },
+        "tipo": { "type": "string" },
+        "status": { "type": "string" },
+        "observacoes": { "type": "string" }
+      }
+    },
+    "Cliente": {
+      "title": "Cliente",
+      "description": "Tutores de animais",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "nome": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "telefone": { "type": "string" },
+        "endereco": { "type": "string" },
+        "cpf": { "type": "string" }
+      }
+    },
+    "Animal": {
+      "title": "Animal",
+      "description": "Pets cadastrados",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "cliente_id": { "type": "string" },
+        "nome": { "type": "string" },
+        "especie": { "type": "string" },
+        "raca": { "type": "string" },
+        "data_nascimento": { "type": "string", "format": "date" },
+        "peso": { "type": "number" },
+        "sexo": { "type": "string" }
+      }
+    },
+    "VacinaHistorico": {
+      "title": "VacinaHistorico",
+      "description": "Histórico de vacinação",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "animal_id": { "type": "string" },
+        "vacina": { "type": "string" },
+        "data_aplicacao": { "type": "string", "format": "date" },
+        "proxima_dose": { "type": "string", "format": "date" }
+      }
+    },
+    "Despesa": {
+      "title": "Despesa",
+      "description": "Gastos da clínica",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "descricao": { "type": "string" },
+        "valor": { "type": "number" },
+        "categoria": { "type": "string" },
+        "data": { "type": "string", "format": "date" }
+      }
+    },
+    "Produto": {
+      "title": "Produto",
+      "description": "Itens de estoque",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "nome": { "type": "string" },
+        "categoria": { "type": "string" },
+        "preco_venda": { "type": "number" },
+        "estoque_atual": { "type": "number" },
+        "estoque_minimo": { "type": "number" }
+      }
+    },
+    "Profissional": {
+      "title": "Profissional",
+      "description": "Veterinários e funcionários",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "nome": { "type": "string" },
+        "cargo": { "type": "string" },
+        "crmv": { "type": "string" },
+        "email": { "type": "string", "format": "email" }
+      }
+    },
+    "Venda": {
+      "title": "Venda",
+      "description": "Vendas realizadas",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "cliente_id": { "type": "string" },
+        "valor_total": { "type": "number" },
+        "data": { "type": "string", "format": "date-time" },
+        "itens": { "type": "array" }
+      }
+    },
+    "Internacao": {
+      "title": "Internacao",
+      "description": "Animais internados",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "animal_id": { "type": "string" },
+        "data_entrada": { "type": "string", "format": "date-time" },
+        "data_saida": { "type": "string", "format": "date-time" },
+        "motivo": { "type": "string" },
+        "status": { "type": "string" }
+      }
+    },
+    "RegistroProntuario": {
+      "title": "RegistroProntuario",
+      "description": "Evolução clínica",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "animal_id": { "type": "string" },
+        "profissional_id": { "type": "string" },
+        "descricao": { "type": "string" },
+        "tipo": { "type": "string" }
+      }
+    },
+    "Orcamento": {
+      "title": "Orcamento",
+      "description": "Orçamentos para clientes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "cliente_id": { "type": "string" },
+        "animal_id": { "type": "string" },
+        "valor_total": { "type": "number" },
+        "status": { "type": "string" }
+      }
+    },
+    "Procedimento": {
+      "title": "Procedimento",
+      "description": "Procedimentos realizados",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "nome": { "type": "string" },
+        "valor": { "type": "number" }
+      }
+    },
+    "TarefaVeterinaria": {
+      "title": "TarefaVeterinaria",
+      "description": "Tarefas diárias",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "descricao": { "type": "string" },
+        "status": { "type": "string" },
+        "prioridade": { "type": "string" }
+      }
+    },
+    "Anamnese": {
+      "title": "Anamnese",
+      "description": "Histórico inicial",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "animal_id": { "type": "string" },
+        "queixa_principal": { "type": "string" },
+        "historico": { "type": "string" }
+      }
+    },
+    "Termo": {
+      "title": "Termo",
+      "description": "Termos de consentimento",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "nome": { "type": "string" },
+        "conteudo": { "type": "string" }
+      }
+    },
+    "ModeloReceita": {
+      "title": "ModeloReceita",
+      "description": "Modelos de prescrição",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "nome": { "type": "string" },
+        "conteudo": { "type": "string" }
+      }
+    },
+    "Medicamento": {
+      "title": "Medicamento",
+      "description": "Medicamentos disponíveis",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "nome_comercial": { "type": "string" },
+        "principio_ativo": { "type": "string" },
+        "concentracao": { "type": "string" }
+      }
+    },
+    "Receita": {
+      "title": "Receita",
+      "description": "Receitas emitidas",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "animal_id": { "type": "string" },
+        "cliente_id": { "type": "string" },
+        "conteudo": { "type": "string" }
+      }
+    },
+    "ProdutoVariante": {
+      "title": "ProdutoVariante",
+      "description": "Variantes de produtos",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "produto_id": { "type": "string" },
+        "nome": { "type": "string" },
+        "preco": { "type": "number" }
+      }
+    },
+    "MovimentacaoEstoque": {
+      "title": "MovimentacaoEstoque",
+      "description": "Entradas e saídas de estoque",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "produto_id": { "type": "string" },
+        "quantidade": { "type": "number" },
+        "tipo": { "type": "string" },
+        "data": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Notificacao": {
+      "title": "Notificacao",
+      "description": "Alertas do sistema",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "mensagem": { "type": "string" },
+        "lida": { "type": "boolean" }
+      }
+    },
+    "Campanha": {
+      "title": "Campanha",
+      "description": "Campanhas de marketing",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "nome": { "type": "string" },
+        "status": { "type": "string" }
+      }
+    },
+    "Promocao": {
+      "title": "Promocao",
+      "description": "Promoções e descontos",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "nome": { "type": "string" },
+        "codigo": { "type": "string" },
+        "valor_desconto": { "type": "number" }
+      }
+    },
+    "Escala": {
+      "title": "Escala",
+      "description": "Escala de trabalho",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "created_date": { "type": "string", "format": "date-time" },
+        "profissional_id": { "type": "string" },
+        "data": { "type": "string", "format": "date" },
+        "turno": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/agendamentos": { "schema": "Agendamento", "description": "Agendamentos" },
+    "/clientes": { "schema": "Cliente", "description": "Clientes" },
+    "/animais": { "schema": "Animal", "description": "Animais" },
+    "/vacinas_historico": { "schema": "VacinaHistorico", "description": "Histórico de vacinas" },
+    "/despesas": { "schema": "Despesa", "description": "Despesas" },
+    "/produtos": { "schema": "Produto", "description": "Produtos" },
+    "/profissionais": { "schema": "Profissional", "description": "Profissionais" },
+    "/vendas": { "schema": "Venda", "description": "Vendas" },
+    "/internacoes": { "schema": "Internacao", "description": "Internações" },
+    "/prontuarios": { "schema": "RegistroProntuario", "description": "Prontuários" },
+    "/orcamentos": { "schema": "Orcamento", "description": "Orçamentos" },
+    "/procedimentos": { "schema": "Procedimento", "description": "Procedimentos" },
+    "/tarefas": { "schema": "TarefaVeterinaria", "description": "Tarefas" },
+    "/anamneses": { "schema": "Anamnese", "description": "Anamneses" },
+    "/termos": { "schema": "Termo", "description": "Termos" },
+    "/modelos_receita": { "schema": "ModeloReceita", "description": "Modelos de receita" },
+    "/medicamentos": { "schema": "Medicamento", "description": "Medicamentos" },
+    "/receitas": { "schema": "Receita", "description": "Receitas" },
+    "/produto_variantes": { "schema": "ProdutoVariante", "description": "Variantes de produto" },
+    "/movimentacoes_estoque": { "schema": "MovimentacaoEstoque", "description": "Movimentações de estoque" },
+    "/notificacoes": { "schema": "Notificacao", "description": "Notificações" },
+    "/campanhas": { "schema": "Campanha", "description": "Campanhas" },
+    "/promocoes": { "schema": "Promocao", "description": "Promoções" },
+    "/escalas": { "schema": "Escala", "description": "Escalas" }
+  }
+}
