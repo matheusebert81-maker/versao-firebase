@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,19 @@ export default function Animais() {
   const [showForm, setShowForm] = useState(false);
   const [selectedAnimal, setSelectedAnimal] = useState<any>(null);
   const [editingAnimal, setEditingAnimal] = useState<any>(null);
+  const [preSelectedClienteId, setPreSelectedClienteId] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.query.new === 'true') {
+      setShowForm(true);
+      if (router.query.cliente_id) {
+        setPreSelectedClienteId(router.query.cliente_id as string);
+      }
+      // Remove query params to avoid reopening on refresh
+      router.replace('/animais', undefined, { shallow: true });
+    }
+  }, [router.query, router]);
 
   const queryClient = useQueryClient();
 
@@ -88,10 +102,12 @@ export default function Animais() {
     return (
       <AnimalForm 
         animal={editingAnimal}
+        preSelectedClienteId={preSelectedClienteId}
         onSubmit={handleSubmit}
         onCancel={() => {
           setShowForm(false);
           setEditingAnimal(null);
+          setPreSelectedClienteId(null);
         }}
         clientes={clientes}
       />

@@ -7,9 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Save } from "lucide-react";
 
-export default function AnimalForm({ animal, clientes, onSubmit, onCancel, isLoading }: { animal?: any, clientes: any[], onSubmit: (data: any) => void, onCancel: () => void, isLoading?: boolean }) {
+export default function AnimalForm({ animal, clientes, onSubmit, onCancel, isLoading, preSelectedClienteId }: { animal?: any, clientes: any[], onSubmit: (data: any) => void, onCancel: () => void, isLoading?: boolean, preSelectedClienteId?: string | null }) {
   const [formData, setFormData] = useState(animal || {
-    cliente_id: "",
+    cliente_id: preSelectedClienteId || "",
     nome: "",
     especie: "Cão",
     raca: "",

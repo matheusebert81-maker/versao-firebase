@@ -11,9 +11,10 @@ interface AgendaHorariosProps {
   animais: any[];
   onEdit: (agendamento: any) => void;
   onDelete: (id: string) => void;
+  onSelect: (agendamento: any) => void;
 }
 
-export default function AgendaHorarios({ agendamentos, clientes, animais, onEdit, onDelete }: AgendaHorariosProps) {
+export default function AgendaHorarios({ agendamentos, clientes, animais, onEdit, onDelete, onSelect }: AgendaHorariosProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -59,7 +60,7 @@ export default function AgendaHorarios({ agendamentos, clientes, animais, onEdit
           const animal = animais.find(a => a.id === agendamento.animal_id);
 
           return (
-            <Card key={agendamento.id} className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow">
+            <Card key={agendamento.id} className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => onSelect(agendamento)}>
               <div className="flex flex-col md:flex-row">
                 {/* Horário e Status */}
                 <div className="bg-slate-50 p-4 md:w-48 flex flex-col justify-center items-center border-b md:border-b-0 md:border-r border-slate-100">
@@ -95,7 +96,7 @@ export default function AgendaHorarios({ agendamentos, clientes, animais, onEdit
                 </div>
 
                 {/* Ações */}
-                <div className="p-4 flex flex-row md:flex-col justify-end gap-2 bg-slate-50/50 border-t md:border-t-0 md:border-l border-slate-100">
+                <div className="p-4 flex flex-row md:flex-col justify-end gap-2 bg-slate-50/50 border-t md:border-t-0 md:border-l border-slate-100" onClick={(e) => e.stopPropagation()}>
                   <Button variant="outline" size="sm" onClick={() => onEdit(agendamento)} className="text-blue-600 hover:text-blue-700 hover:bg-blue-50">
                     <Edit className="w-4 h-4 mr-2" />
                     Editar

@@ -15,12 +15,24 @@ export default function AgendarProcedimento({ internacao, animal, onClose }: { i
   const [dose, setDose] = useState("");
   const [via, setVia] = useState("");
   const [dataPlanejada, setDataPlanejada] = useState("");
+  const [profissionalId, setProfissionalId] = useState("");
+  const [procedimentoId, setProcedimentoId] = useState("");
   const [prioridade, setPrioridade] = useState("Média");
   const [medSearch, setMedSearch] = useState("");
+
+  const { data: profissionais = [] } = useQuery({
+    queryKey: ['profissionais'],
+    queryFn: () => api.entities.Profissional.list(),
+  });
 
   const { data: medicamentos = [] } = useQuery({
     queryKey: ['medicamentos'],
     queryFn: () => api.entities.Medicamento.list(),
+  });
+
+  const { data: procedimentos = [] } = useQuery({
+    queryKey: ['procedimentos'],
+    queryFn: () => api.entities.Procedimento.list(),
   });
 
   const filteredMeds = medicamentos.filter((m: any) => 
@@ -62,6 +74,8 @@ export default function AgendarProcedimento({ internacao, animal, onClose }: { i
       medicamento: tipo === "Medicação" ? nome : null,
       dose: tipo === "Medicação" ? dose : null,
       via: tipo === "Medicação" ? via : null,
+      profissional_id: profissionalId,
+      procedimento_id: tipo === "Procedimento" ? procedimentoId : null,
     });
   };
 
@@ -88,16 +102,28 @@ export default function AgendarProcedimento({ internacao, animal, onClose }: { i
                 </Select>
             </div>
             <div>
-                <Label>Prioridade</Label>
-                <Select value={prioridade} onValueChange={(val) => setPrioridade(val || "Média")}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                <Label>Profissional Responsável</Label>
+                <Select value={profissionalId} onValueChange={(val) => setProfissionalId(val || "")}>
+                    <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="Alta">Alta (Vermelho)</SelectItem>
-                        <SelectItem value="Média">Média (Amarelo)</SelectItem>
-                        <SelectItem value="Baixa">Baixa (Verde)</SelectItem>
+                        {profissionais.map((p: any) => (
+                            <SelectItem key={p.id} value={p.id}>{p.nome}</SelectItem>
+                        ))}
                     </SelectContent>
                 </Select>
             </div>
+        </div>
+        
+        <div>
+            <Label>Prioridade</Label>
+            <Select value={prioridade} onValueChange={(val) => setPrioridade(val || "Média")}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="Alta">Alta (Vermelho)</SelectItem>
+                    <SelectItem value="Média">Média (Amarelo)</SelectItem>
+                    <SelectItem value="Baixa">Baixa (Verde)</SelectItem>
+                </SelectContent>
+            </Select>
         </div>
 
         {tipo === "Medicação" ? (
@@ -156,10 +182,24 @@ export default function AgendarProcedimento({ internacao, animal, onClose }: { i
                     </div>
                 </div>
             </div>
+        ) : tipo === "Procedimento" ? (
+            <div>
+                <Label>Procedimento</Label>
+                <Select value={procedimentoId} onValueChange={(val) => setProcedimentoId(val || "")}>
+                    <SelectTrigger><SelectValue placeholder="Selecione o procedimento..." /></SelectTrigger>
+                    <SelectContent>
+                        {procedimentos.map((p: any) => (
+                            <SelectItem key={p.id} value={p.id}>{p.nome}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                <Label className="mt-2">Descrição Adicional</Label>
+                <Input value={nome} onChange={e => setNome(e.target.value)} placeholder="Ex: Detalhes do curativo" />
+            </div>
         ) : (
             <div>
                 <Label>Descrição da Tarefa</Label>
-                <Input value={nome} onChange={e => setNome(e.target.value)} placeholder="Ex: Troca de curativo, Coleta de sangue" />
+                <Input value={nome} onChange={e => setNome(e.target.value)} placeholder="Ex: Coleta de sangue" />
             </div>
         )}
 

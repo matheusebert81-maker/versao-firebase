@@ -1,7 +1,8 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Edit, Trash2, Phone, Mail, MapPin, Calendar, Dog } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, Phone, Mail, MapPin, Calendar, Dog, Plus } from 'lucide-react';
 
 interface ClienteDetalhesProps {
   cliente: any;
@@ -12,6 +13,12 @@ interface ClienteDetalhesProps {
 }
 
 export default function ClienteDetalhes({ cliente, animais, onBack, onEdit, onDelete }: ClienteDetalhesProps) {
+  const router = useRouter();
+
+  const handleAddPet = () => {
+    router.push(`/animais?new=true&cliente_id=${cliente.id}`);
+  };
+
   return (
     <div className="p-4 md:p-8 bg-slate-50 min-h-screen">
       <div className="max-w-4xl mx-auto">
@@ -73,11 +80,15 @@ export default function ClienteDetalhes({ cliente, animais, onBack, onEdit, onDe
           </Card>
 
           <Card className="md:col-span-2">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="flex items-center">
                 <Dog className="w-5 h-5 mr-2" />
                 Pets ({animais.length})
               </CardTitle>
+              <Button onClick={handleAddPet} size="sm" className="bg-green-600 hover:bg-green-700 text-white">
+                <Plus className="w-4 h-4 mr-2" />
+                Adicionar Novo Pet
+              </Button>
             </CardHeader>
             <CardContent>
               {animais.length === 0 ? (

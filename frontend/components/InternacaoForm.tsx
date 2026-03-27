@@ -14,12 +14,19 @@ interface InternacaoFormProps {
 
 export default function InternacaoForm({ onClose }: InternacaoFormProps) {
   const queryClient = useQueryClient();
+  const getLocalDatetimeString = () => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    return now.toISOString().slice(0, 16);
+  };
+
   const [formData, setFormData] = useState({
     animal_id: '',
     motivo: '',
     status: 'Observação',
     leito: '',
-    observacoes: ''
+    observacoes: '',
+    data_entrada: getLocalDatetimeString()
   });
 
   const { data: animais = [] } = useQuery({
@@ -31,7 +38,7 @@ export default function InternacaoForm({ onClose }: InternacaoFormProps) {
     mutationFn: (data: any) => {
       const payload = {
         ...data,
-        data_entrada: new Date().toISOString()
+        data_entrada: new Date(data.data_entrada).toISOString()
       };
       return db.entities.Internacao.create(payload);
     },
@@ -94,13 +101,24 @@ export default function InternacaoForm({ onClose }: InternacaoFormProps) {
                 </select>
               </div>
 
-              <div className="space-y-2 md:col-span-2">
+              <div className="space-y-2">
                 <Label htmlFor="motivo">Motivo da Internação *</Label>
                 <Input
                   id="motivo"
                   placeholder="Ex: Pós-operatório, Intoxicação, etc."
                   value={formData.motivo}
                   onChange={(e) => setFormData({ ...formData, motivo: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="data_entrada">Data de Entrada *</Label>
+                <Input
+                  id="data_entrada"
+                  type="datetime-local"
+                  value={formData.data_entrada}
+                  onChange={(e) => setFormData({ ...formData, data_entrada: e.target.value })}
                   required
                 />
               </div>

@@ -30,6 +30,7 @@ interface LayoutProps {
 }
 
 import GlobalSearch from './GlobalSearch';
+import LogoGeneratorDialog from './LogoGeneratorDialog';
 
 import {
   DropdownMenu,
@@ -139,6 +140,7 @@ export default function Layout({ children }: LayoutProps) {
 
           <div className="flex items-center gap-2 md:gap-4">
             <div className="hidden sm:flex items-center gap-2 mr-2">
+              <LogoGeneratorDialog />
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Button variant="outline" size="sm" className="rounded-full border-blue-100 text-blue-600 hover:bg-blue-50">

@@ -8,6 +8,7 @@ import db from "@/lib/db";
 
 import InternacoesList from "@/components/InternacoesList";
 import InternacaoForm from "@/components/InternacaoForm";
+import AgendarProcedimento from "@/components/veterinario/AgendarProcedimento";
 import Dummy from "@/components/Dummy";
 const ProntuarioView = Dummy;
 const OrcamentosList = Dummy;
@@ -22,7 +23,9 @@ export default function Veterinario() {
   const [activeTab, setActiveTab] = useState("internacoes");
   const [showInternacaoForm, setShowInternacaoForm] = useState(false);
   const [showPrescription, setShowPrescription] = useState(false);
+  const [showAgendarForm, setShowAgendarForm] = useState(false);
   const [selectedInternacao, setSelectedInternacao] = useState(null);
+  const [selectedInternacaoForAgendar, setSelectedInternacaoForAgendar] = useState<{internacao: any, animal: any} | null>(null);
 
   const queryClient = useQueryClient();
 
@@ -81,6 +84,18 @@ export default function Veterinario() {
           <InternacaoForm onClose={() => setShowInternacaoForm(false)} />
         )}
 
+        {showAgendarForm && selectedInternacaoForAgendar && (
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div className="w-full max-w-lg">
+              <AgendarProcedimento 
+                internacao={selectedInternacaoForAgendar.internacao} 
+                animal={selectedInternacaoForAgendar.animal} 
+                onClose={() => setShowAgendarForm(false)} 
+              />
+            </div>
+          </div>
+        )}
+
         {showPrescription && (
           <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
              <PrescriptionBuilder />
@@ -120,7 +135,10 @@ export default function Veterinario() {
           </TabsList>
 
           <TabsContent value="internacoes" className="animate-in fade-in-50 duration-300">
-            <InternacoesList />
+            <InternacoesList onAgendar={(internacao, animal) => {
+              setSelectedInternacaoForAgendar({internacao, animal});
+              setShowAgendarForm(true);
+            }} />
           </TabsContent>
 
           <TabsContent value="orcamentos">

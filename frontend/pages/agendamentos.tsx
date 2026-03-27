@@ -3,17 +3,18 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Calendar, ChevronLeft, ChevronRight, Users } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Plus, Calendar, ChevronLeft, ChevronRight, Users, Filter } from "lucide-react";
 import { format, addDays, startOfWeek, endOfWeek, isSameDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import db from "@/lib/db";
 
 import AgendamentoForm from "@/components/AgendamentoForm";
 import AgendaHorarios from "@/components/AgendaHorarios";
+import AgendaPorProfissional from "@/components/AgendaPorProfissional";
+import AgendamentoDetalhes from "@/components/AgendamentoDetalhes";
 import Dummy from "@/components/Dummy";
 const AgendaSemanal = Dummy;
-const AgendaPorProfissional = Dummy;
-const AgendamentoDetalhes = Dummy;
 const NotificacoesPanel = Dummy;
 const CalendarioCompleto = Dummy;
 
@@ -25,6 +26,7 @@ export default function Agendamentos() {
   const [viewMode, setViewMode] = useState("day");
   const [showNotifications, setShowNotifications] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedProfissional, setSelectedProfissional] = useState<string>("todos");
 
   const queryClient = useQueryClient();
 
@@ -187,14 +189,18 @@ export default function Agendamentos() {
 
   const agendamentosDoDia = agendamentos.filter((a: any) => {
     const dataAgendamento = new Date(a.data);
-    return isSameDay(dataAgendamento, selectedDate);
+    const isSameDayMatch = isSameDay(dataAgendamento, selectedDate);
+    if (selectedProfissional === "todos") return isSameDayMatch;
+    return isSameDayMatch && a.profissional_id === selectedProfissional;
   });
 
   const agendamentosDaSemana = agendamentos.filter((a: any) => {
     const dataAgendamento = new Date(a.data);
     const inicioSemana = startOfWeek(selectedDate, { locale: ptBR });
     const fimSemana = endOfWeek(selectedDate, { locale: ptBR });
-    return dataAgendamento >= inicioSemana && dataAgendamento <= fimSemana;
+    const isSameWeekMatch = dataAgendamento >= inicioSemana && dataAgendamento <= fimSemana;
+    if (selectedProfissional === "todos") return isSameWeekMatch;
+    return isSameWeekMatch && a.profissional_id === selectedProfissional;
   });
 
   const handlePreviousDay = () => setSelectedDate(prev => addDays(prev, -1));
@@ -202,8 +208,13 @@ export default function Agendamentos() {
   const handleToday = () => setSelectedDate(new Date());
 
   if (selectedAgendamento) {
+    const animal = animais.find((a: any) => a.id === selectedAgendamento.animal_id);
     return (
-      <AgendamentoDetalhes />
+      <AgendamentoDetalhes 
+        agendamento={selectedAgendamento} 
+        animal={animal} 
+        onBack={() => setSelectedAgendamento(null)} 
+      />
     );
   }
 
@@ -316,6 +327,26 @@ export default function Agendamentos() {
                 Hoje
               </Button>
             </div>
+            
+            <div className="mt-4 flex items-center gap-3">
+              <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
+                <Filter className="w-4 h-4 text-slate-500" />
+                <span className="text-sm font-medium text-slate-700">Filtrar por Profissional:</span>
+              </div>
+              <Select value={selectedProfissional} onValueChange={(val) => setSelectedProfissional(val || "todos")}>
+                <SelectTrigger className="w-[250px] bg-white">
+                  <SelectValue placeholder="Todos os profissionais" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="todos">Todos os profissionais</SelectItem>
+                  {profissionais.map((p: any) => (
+                    <SelectItem key={p.id} value={p.id}>
+                      {p.nome} {p.cargo ? `(${p.cargo})` : ''}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </CardContent>
         </Card>
 
@@ -370,6 +401,7 @@ export default function Agendamentos() {
                 setShowForm(true);
               }}
               onDelete={handleDelete}
+              onSelect={setSelectedAgendamento}
             />
           </TabsContent>
 
@@ -378,7 +410,18 @@ export default function Agendamentos() {
           </TabsContent>
 
           <TabsContent value="professional">
-            <AgendaPorProfissional />
+            <AgendaPorProfissional 
+              agendamentos={agendamentosDoDia}
+              profissionais={profissionais}
+              clientes={clientes}
+              animais={animais}
+              onEdit={(agendamento: any) => {
+                setEditingAgendamento(agendamento);
+                setShowForm(true);
+              }}
+              onDelete={handleDelete}
+              onSelect={setSelectedAgendamento}
+            />
           </TabsContent>
         </Tabs>
       </div>

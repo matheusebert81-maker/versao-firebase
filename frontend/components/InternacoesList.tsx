@@ -3,12 +3,12 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Activity, Clock, FileText, AlertTriangle } from 'lucide-react';
+import { Activity, Clock, FileText, AlertTriangle, Syringe } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import db from '@/lib/db';
 
-export default function InternacoesList() {
+export default function InternacoesList({ onAgendar }: { onAgendar: (internacao: any, animal: any) => void }) {
   const { data: internacoes = [], isLoading } = useQuery({
     queryKey: ['internacoes'],
     queryFn: () => db.entities.Internacao.list('-data_entrada'),
@@ -87,6 +87,10 @@ export default function InternacoesList() {
                 <Button className="w-full bg-blue-50 text-blue-700 hover:bg-blue-100 border-0">
                   <FileText className="w-4 h-4 mr-2" />
                   Prontuário
+                </Button>
+                <Button variant="outline" className="w-full" onClick={() => onAgendar(internacao, animal)}>
+                  <Syringe className="w-4 h-4 mr-2" />
+                  Agendar
                 </Button>
               </div>
             </CardContent>
