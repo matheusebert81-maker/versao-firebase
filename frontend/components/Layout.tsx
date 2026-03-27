@@ -58,7 +58,13 @@ export default function Layout({ children }: LayoutProps) {
     { to: '/admin', icon: ShieldAlert, label: 'Usuários' },
   ];
 
+  const isLoginPage = router.pathname === '/login';
+
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
+  if (isLoginPage) {
+    return <div className="min-h-screen bg-slate-50 font-sans">{children}</div>;
+  }
 
   return (
     <div className="flex h-screen bg-slate-50 font-sans">
@@ -148,7 +154,7 @@ export default function Layout({ children }: LayoutProps) {
                   <DropdownMenuItem onClick={() => router.push('/animais')} className="p-3 cursor-pointer">
                     <Dog className="w-4 h-4 mr-2 text-indigo-500" /> Paciente
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push('/clientes')} className="p-3 cursor-pointer">
+                  <DropdownMenuItem onClick={() => router.push('/clientes?new=true')} className="p-3 cursor-pointer">
                     <Users className="w-4 h-4 mr-2 text-emerald-500" /> Cliente
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />

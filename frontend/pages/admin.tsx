@@ -142,7 +142,28 @@ export default function AdminUsuarios() {
                  <Input value={formData.cpf} onChange={e => setFormData({...formData, cpf: e.target.value})} />
               </div>
 
-              <div className="flex items-center gap-2 pt-6">
+              {formData.tipo === 'Veterinário' && (
+                <>
+                  <div>
+                    <Label>CRMV</Label>
+                    <Input 
+                      value={formData.crmv || ''} 
+                      onChange={e => setFormData({...formData, crmv: e.target.value})} 
+                      placeholder="Ex: 12345/SP"
+                    />
+                  </div>
+                  <div>
+                    <Label>Especialidade</Label>
+                    <Input 
+                      value={formData.especialidade || ''} 
+                      onChange={e => setFormData({...formData, especialidade: e.target.value})} 
+                      placeholder="Ex: Clínico Geral, Cirurgião"
+                    />
+                  </div>
+                </>
+              )}
+
+              <div className="flex items-center gap-2 pt-6 md:col-span-2">
                  <div className={`w-10 h-5 rounded-full p-0.5 cursor-pointer transition-colors ${formData.ativo ? 'bg-green-500' : 'bg-slate-300'}`}
                       onClick={() => setFormData({...formData, ativo: !formData.ativo})}
                  >

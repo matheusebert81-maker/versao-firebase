@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { api } from '@/lib/api';
 
@@ -44,6 +44,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const loginWithEmail = async (email: string, pass: string) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+    } catch (error: any) {
+      console.error('Login failed:', error);
+      setAuthError({
+        type: 'login_failed',
+        message: error.message || 'Falha ao entrar com e-mail e senha'
+      });
+      throw error;
+    }
+  };
+
   const logout = async () => {
     try {
       await signOut(auth);
@@ -68,6 +81,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       authError,
       logout,
       loginWithGoogle,
+      loginWithEmail,
       navigateToLogin
     }}>
       {children}

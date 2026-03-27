@@ -21,8 +21,8 @@ export default function AgendamentoForm({ initialData, onSubmit, onCancel, clien
     animal_id: initialData?.animal_id || '',
     profissional_id: initialData?.profissional_id || '',
     data: initialData?.data || '',
-    hora: initialData?.hora || '',
-    tipo_servico: initialData?.tipo_servico || '',
+    horario: initialData?.horario || initialData?.hora || '',
+    servicos: initialData?.servicos || (initialData?.tipo_servico ? [initialData.tipo_servico] : []),
     status: initialData?.status || 'Agendado',
     observacoes: initialData?.observacoes || '',
     valor_total: initialData?.valor_total || '',
@@ -34,7 +34,11 @@ export default function AgendamentoForm({ initialData, onSubmit, onCancel, clien
   };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
+    if (name === 'tipo_servico') {
+      setFormData(prev => ({ ...prev, servicos: [value] }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -133,7 +137,7 @@ export default function AgendamentoForm({ initialData, onSubmit, onCancel, clien
                 <div className="space-y-2">
                   <Label htmlFor="tipo_servico">Tipo de Serviço *</Label>
                   <Select 
-                    value={formData.tipo_servico} 
+                    value={formData.servicos?.[0] || ''} 
                     onValueChange={(value) => handleSelectChange('tipo_servico', value)}
                     required
                   >
@@ -164,13 +168,13 @@ export default function AgendamentoForm({ initialData, onSubmit, onCancel, clien
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="hora">Hora *</Label>
+                  <Label htmlFor="horario">Hora *</Label>
                   <Input
-                    id="hora"
-                    name="hora"
+                    id="horario"
+                    name="horario"
                     type="time"
                     required
-                    value={formData.hora}
+                    value={formData.horario}
                     onChange={handleChange}
                   />
                 </div>

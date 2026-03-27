@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,15 @@ export default function Clientes() {
   const [showForm, setShowForm] = useState(false);
   const [selectedCliente, setSelectedCliente] = useState<any>(null);
   const [editingCliente, setEditingCliente] = useState<any>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.query.new === 'true') {
+      setShowForm(true);
+      // Remove query param to avoid reopening on refresh
+      router.replace('/clientes', undefined, { shallow: true });
+    }
+  }, [router.query.new, router]);
 
   const queryClient = useQueryClient();
 
